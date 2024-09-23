@@ -8,8 +8,16 @@ const port = process.env.PORT || 3001; // Usa PORT de variables de entorno, si n
 
 
 // Middleware para habilitar CORS
+// Obtén el origen del frontend desde las variables de entorno
+const allowedOrigins = [
+  'http://localhost:3000', // Para desarrollo local
+  'https://client-gestor-tareas-production.up.railway.app' // Para producción
+];
+
+// Middleware para habilitar CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // Permite solicitudes desde tu frontend local
+  origin: allowedOrigins, // Permite solicitudes desde los orígenes especificados
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
 }));
 
 // Middleware para analizar el cuerpo de las solicitudes en formato JSON
