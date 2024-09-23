@@ -6,7 +6,13 @@ const app = express();
 const port = config.port; // Usar el puerto desde config.js
 
 // Middleware para habilitar CORS
-app.use(cors());
+// Configura CORS para permitir el acceso desde el dominio de tu frontend
+const corsOptions = {
+  origin: 'https://client-gestor-tareas-production.up.railway.app',  // URL de tu frontend desplegado
+  optionsSuccessStatus: 200, // Para navegadores más antiguos
+};
+
+app.use(cors(corsOptions));
 
 // Middleware para analizar el cuerpo de las solicitudes en formato JSON
 app.use(express.json());
