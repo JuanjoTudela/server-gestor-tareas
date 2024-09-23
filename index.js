@@ -1,18 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-const config = require('./config'); // Importar configuraciones
+require('dotenv').config(); 
+
 
 const app = express();
-const port = config.port; // Usar el puerto desde config.js
+const port = process.env.PORT || 3001; // Usa PORT de variables de entorno, si no existe, usa 3001
+
 
 // Middleware para habilitar CORS
-// Configura CORS para permitir el acceso desde el dominio de tu frontend
-const corsOptions = {
-  origin: 'https://client-gestor-tareas-production.up.railway.app',  // URL de tu frontend desplegado
-  optionsSuccessStatus: 200, // Para navegadores más antiguos
-};
-
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'http://localhost:3000', // Permite solicitudes desde tu frontend local
+}));
 
 // Middleware para analizar el cuerpo de las solicitudes en formato JSON
 app.use(express.json());
@@ -60,10 +58,7 @@ app.delete('/tasks/:id', (req, res) => {
 
   if (index !== -1) {
     tasks.splice(index, 1); // Elimina la tarea del array
-
-    // Reasignar IDs de las tareas restantes
-    tasks = tasks.map((task, i) => ({ ...task, id: i + 1 }));
-
+    tasks = tasks.map((task, i) => ({ ...task, id: i + 1 })); // Reasignar IDs de las tareas restantes
     res.status(204).send(); // Respuesta sin contenido (No Content)
   } else {
     res.status(404).json({ message: 'Tarea no encontrada' });
